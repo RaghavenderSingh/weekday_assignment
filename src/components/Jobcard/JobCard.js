@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import "./JobCard.css";
+import { capitalizeFirstWord } from "../../utils/util";
 
 export default function JobCard({ jobData }) {
   const [showMore, setShowMore] = useState(false);
@@ -21,17 +22,12 @@ export default function JobCard({ jobData }) {
   const handleClose = () => {
     setShowMore(false);
   };
-  const options = {
-    shouldForwardProp: (prop) => prop !== "hoverShadow",
-  };
-  const StyledCard = styled(
-    Card,
-    options
-  )(({ theme, hoverShadow = 1 }) => ({
-    ":hover": {
-      boxShadow: theme.shadows[hoverShadow],
-    },
-  }));
+  
+ const StyledCard = styled(Card)(({ theme }) => ({
+  borderRadius:"20px",
+  transition: "transform 0.15s ease-in-out",
+  "&:hover": { transform: "scale3d(1.02, 1.02, 1)" },
+}))
   const FadedText = styled(Typography)(({ theme }) => ({
     position: "relative",
     maxHeight: "200px",
@@ -50,9 +46,10 @@ export default function JobCard({ jobData }) {
     },
   }));
   return (
-    <StyledCard className="jobCardContainer">
+    <Box className="jobCardContainer">
+    <StyledCard>
       <Box className="timeChipBox">
-        <Chip size="small" variant="outlined" label="⏳ Posted 6 day ago" />
+        <Chip sx={{fontSize:"9px",height:"20px",padding:"4px 6px"}} variant="outlined" label="⏳ Posted 6 day ago" />
       </Box>
       <CardContent>
         <Box>
@@ -62,9 +59,9 @@ export default function JobCard({ jobData }) {
             </Box>
             <div>
               <h3 className="companyName">{jobData?.companyName}</h3>
-              <h2 className="role">{jobData?.jobRole}</h2>
+              <h2 className="role">{capitalizeFirstWord(jobData?.jobRole)}</h2>
               <p className="location">
-                {jobData?.location}
+                {capitalizeFirstWord(jobData?.location)}
               </p>
             </div>
           </Box>
@@ -129,6 +126,6 @@ export default function JobCard({ jobData }) {
           </Box>
         </Box>
       </CardContent>
-    </StyledCard>
+    </StyledCard></Box>
   );
 }

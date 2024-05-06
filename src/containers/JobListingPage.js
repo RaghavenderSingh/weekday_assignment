@@ -1,9 +1,7 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGetJobsQuery } from '../api/jobsApi';
 import JobCard from '../components/Jobcard/JobCard';
 import FilterComponent from '../components/FilterSidebar/FilterSidebar';
-
 
 const JobListingPage = () => {
   const [page, setPage] = useState(1);
@@ -21,22 +19,14 @@ const JobListingPage = () => {
         )
       );
 
-      console.log('Filtered jobs based on search:', filteredJobs);
-
       setCombinedJobData(prevData => {
         const newData = [...prevData, ...filteredJobs];
         const filteredData = filterJobData(newData, filterParams);
-
-        console.log('Filtered data after applying all filters:', filteredData);
-
         const finalFilteredData = filteredData.filter(job =>
           Object.values(job).some(value =>
             typeof value === 'string' && value && value.toLowerCase().includes(searchValue.toLowerCase())
           )
         );
-
-        console.log('Final filtered data:', finalFilteredData);
-
         return finalFilteredData;
       });
     }
@@ -58,17 +48,28 @@ const JobListingPage = () => {
   }, [isFetching]);
 
   const handleFilterChange = useCallback((filterObject) => {
-    setFilterParams(filterObject);
-    setSearchValue(filterObject.searchValue);
+    const { searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay } = filterObject;
+    setFilterParams({ searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay });
+    setSearchValue(searchValue);
     setPage(1);
     setCombinedJobData([]);
   }, []);
 
   const filterJobData = (jobData, filterParams) => {
-    console.log('Filtering job data:', jobData, filterParams);
+    const { roles, remote, noOfEmployees, techStack, companySearchValue, minBasePay } = filterParams;
 
     return jobData.filter(job => {
-      const { roles, remote, noOfEmployees, techStack } = filterParams;
+      const { companyName, basePay } = job;
+
+      // Filter by company name
+      if (companySearchValue && !companyName.toLowerCase().includes(companySearchValue.toLowerCase())) {
+        return false;
+      }
+
+      // Filter by min base pay
+      if (minBasePay && basePay < minBasePay) {
+        return false;
+      }
 
       // Filter by roles
       if (roles.length > 0 && !roles.some(role => role.toLowerCase() === job.jobRole.toLowerCase())) {
@@ -115,12 +116,11 @@ const JobListingPage = () => {
     display: "flex",
     flexWrap: "wrap",
     alignContent: 'flex-start',
-    gap: "10px",
-    padding: "30px",
+    gap: "10"
   };
 
   return (
-    <div style={{ padding: "40px",margin:"16px 50px " }}>
+    <div style={{ padding: "40px", margin: "16px 50px " }}>
       <FilterComponent onFilterChange={handleFilterChange} />
       {isLoading ? (
         <div>Loading...</div>

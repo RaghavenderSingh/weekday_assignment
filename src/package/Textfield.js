@@ -9,14 +9,17 @@ export default function CustomizedTextField({ label, data, type, onChange, minWi
   const options = () => {
     return data.map((role) => ({ title: role }));
   };
-  
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    // Convert the newValue to a Set to remove duplicates
+    const uniqueValues = [...new Set(newValue.map((option) => option.title))];
+
+    setValue(uniqueValues.map((title) => ({ title })));
+
     if (type === 'search') {
       onChange(event.target.value);
     } else {
-      onChange(newValue.map((option) => option.title));
+      onChange(uniqueValues);
     }
   };
 
@@ -29,6 +32,8 @@ export default function CustomizedTextField({ label, data, type, onChange, minWi
 
   return (
     <Autocomplete
+      size="small"
+      style={{ minWidth: minWidth || "150px" }}
       multiple={type !== 'search'}
       id={`${type}-tags-demo`}
       value={value}
@@ -37,25 +42,16 @@ export default function CustomizedTextField({ label, data, type, onChange, minWi
       getOptionLabel={getOptionLabel}
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, index) => (
-          <Chip
-            label={typeof option === 'string' ? option : option.title}
-            {...getTagProps({ index })}
-            
-          />
+          <Chip key={index} size="small" label={typeof option === 'string' ? option : option.title} {...getTagProps({ index })} />
         ))
       }
-      renderInput={(params) => (
+      renderInput={(params) =>
         type === 'search' ? (
-          <TextField
-            {...params}
-            label={label}
-            variant="outlined"
-            style={{ minWidth: minWidth || 200 }} // Set the minWidth prop here
-          />
+          <TextField {...params} label={label} variant="outlined" />
         ) : (
-          <TextField {...params} label={label} style={{ minWidth: minWidth || 200 }} /> // Set the minWidth prop here
+          <TextField {...params} label={label} />
         )
-      )}
+      }
     />
   );
 }
