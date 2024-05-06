@@ -1,7 +1,9 @@
-import { Box } from '@mui/material';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useGetJobsQuery } from '../api/jobsApi';
 import JobCard from '../components/Jobcard/JobCard';
+import FilterComponent from '../components/FilterSidebar/FilterSidebar';
+
 
 const JobListingPage = () => {
   const [page, setPage] = useState(1);
@@ -111,15 +113,15 @@ const JobListingPage = () => {
 
   const displayCardStyle = {
     display: "flex",
-    justifyContent: "space-between",
     flexWrap: "wrap",
     alignContent: 'flex-start',
-    gap: "5px",
+    gap: "10px",
     padding: "30px",
   };
 
   return (
-    <div style={{ padding: "40px" }}>
+    <div style={{ padding: "40px",margin:"16px 50px " }}>
+      <FilterComponent onFilterChange={handleFilterChange} />
       {isLoading ? (
         <div>Loading...</div>
       ) : (
