@@ -1,7 +1,7 @@
 Clone the repo
 ### `git Clone https://github.com/RaghavenderSingh/weekday_assignment.git`
 
-## cd weekday_assignment
+## `cd weekday_assignment`
 Install all dependencies
 ### `npm install`
 
