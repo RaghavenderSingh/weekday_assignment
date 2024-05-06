@@ -75,7 +75,7 @@ export default function JobCard({ jobData }) {
               </div>
             </Box>
             <Box className="salary">
-            <span>{"Estimated Salary:"}</span>
+            <span>{"Estimated Salary: "}</span>
             <span>
             {jobData?.minJdSalary !== null && jobData?.maxJdSalary !== null
               ? `${jobData.minJdSalary}k - ${jobData.maxJdSalary}k ${jobData.salaryCurrencyCode}`
@@ -124,7 +124,7 @@ export default function JobCard({ jobData }) {
                       fontWeight: "500",
                       color: "black",
                       ":hover": {
-                        bgcolor: "#55efc4", // theme.palette.primary.main
+                        bgcolor: "#55efc4", 
                         color: "black",
                       },
                     }}
@@ -141,7 +141,7 @@ export default function JobCard({ jobData }) {
                       fontWeight: "500",
                       color: "white",
                       ":hover": {
-                        bgcolor: "#4943da", // theme.palette.primary.main
+                        bgcolor: "#4943da", 
                         color: "white",
                       },
                       
@@ -158,14 +158,14 @@ export default function JobCard({ jobData }) {
                     </AvatarGroup>
                     </Box>
                     <Box>
-                    <Typography>{"Ask for referral"}</Typography>
+                    <Typography className="buttonText">{"Ask for referral"}</Typography>
                     </Box>
                   </Button>
                 </Box>
               </Box>
               <Dialog open={showMore} onClose={handleClose}>
                 <DialogContent>
-                  <p variant="body1">{"bjh"}</p>
+                  <p variant="body1">{""}</p>
                 </DialogContent>
               </Dialog>
             </Box>
