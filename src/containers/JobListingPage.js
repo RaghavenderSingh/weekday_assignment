@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useGetJobsQuery } from '../api/jobsApi';
 import JobCard from '../components/Jobcard/JobCard';
 import FilterComponent from '../components/FilterSidebar/FilterSidebar';
+import { Grid } from '@mui/material';
 
 const JobListingPage = () => {
   const [page, setPage] = useState(1);
@@ -118,16 +119,32 @@ const JobListingPage = () => {
     alignContent: 'flex-start',
     gap: "10"
   };
+  const container ={
+    padding: "40px",
+    margin: "16px 50px",
+    display: "flex",
+    flexDirection: "column",
+    alignContent: "center",
+    justifyContent: "center",
+  }
+  const  centerItem ={
+    display: "flex",
+    justifyContent: "center",
+  }
 
   return (
-    <div style={{ padding: "40px", margin: "16px 50px " }}>
+    <div style={container}>
+    <div style={centerItem}>
       <FilterComponent onFilterChange={handleFilterChange} />
+      </div>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <div style={displayCardStyle}>
+  
+        <Grid sx={centerItem} container spacing={2}>
           {combinedJobData.map((job) => <JobCard key={job.jdUid} jobData={job} />)}
-        </div>
+        </Grid >
+       
       )}
       {isFetching && !isLoading && <div>Loading more jobs...</div>}
     </div>

@@ -12,6 +12,7 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
   const [noOfEmployees, setNoOfEmployees] = useState([]);
   const [techStack, setTechStack] = useState([]);
   const [minBasePay, setMinBasePay] = useState('');
+  const [experience,setExperience] = useState('')
 
   const handleFilterValueChange = (filterType, filterValue) => {
     switch (filterType) {
@@ -36,6 +37,9 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
       case 'minBasePay':
         setMinBasePay(filterValue);
         break;
+        case 'experience':
+          setExperience(filterValue);
+        break;
       default:
         break;
     }
@@ -44,11 +48,13 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
   const roleOptions = ['Frontend', 'Backend', 'iOS', 'Android'];
   const remoteOptions = ['Remote', 'On-site'];
   const techStackOptions = ['React', 'Angular', 'Vue', 'Node.js'];
-  const minExp = ['0-10', '11-50', '51-100', '101-500'];
+  const minEmpl = ['0-10', '11-50', '51-100', '101-500'];
+  const minExp =['1','2','3','4','5']
+
 
   useEffect(() => {
-    handleFilterChange({ searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay });
-  }, [searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay, handleFilterChange]);
+    handleFilterChange({ searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay,experience });
+  }, [searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay,experience , handleFilterChange]);
 
 
   return (
@@ -93,10 +99,19 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
         disablePortal
         id="combo-box-demo"
         size="small"
-        options={minExp}
+        options={minEmpl}
         sx={{minWidth:"150px"}}
         onChange={(value) => handleFilterValueChange('minBasePay', value.target.value)}
         renderInput={(params) => <TextField {...params} label="Min Base Pay" />}
+      />
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        size="small"
+        options={minExp}
+        sx={{minWidth:"150px"}}
+        onChange={(value) => handleFilterValueChange('Experience', value.target.value)}
+        renderInput={(params) => <TextField {...params} label="Experience" />}
       />
     </div>
   );
