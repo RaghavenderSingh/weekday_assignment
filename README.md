@@ -1,44 +1,15 @@
+Clone the repo
+### `git Clone https://github.com/RaghavenderSingh/weekday_assignment.git`
 
+## cd weekday_assignment
+Install all dependencies
+### `npm install`
 
+Run
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Project Structure 
 
-src/
-├── assets/
-│   ├── images/
-│   ├── fonts/
-│   └── styles/
-├── components/
-│   ├── MyComponent/
-│   │   ├── MyComponent.js
-│   │   ├── MyComponent.css
-│   │   └── index.js
-│   └── ...
-├── pages/
-│   ├── HomePage/
-│   │   ├── HomePage.js
-│   │   ├── HomePage.css
-│   │   └── index.js
-│   └── ...
-├── utils/
-│   ├── helpers.js
-│   ├── constants.js
-│   └── ...
-├── services/
-│   ├── api.js
-│   └── ...
-├── hooks/
-│   ├── useMyHook.js
-│   └── ...
-├── contexts/
-│   ├── MyContext.js
-│   └── ...
-├── App.js
-├── index.js
-└── ...
+![My Image](./public/Screenshot%202024-05-06%20at%207.52.17%20PM.png)
 
