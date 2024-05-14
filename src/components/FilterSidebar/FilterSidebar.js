@@ -106,14 +106,14 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
       />
 
       <Autocomplete
-        disablePortal
-        id="combo-box-demo"
-        size="small"
-        options={minExpOptions}
-        sx={{ minWidth: "150px" }}
-        onChange={(event, value) => handleFilterValueChange('minExp', value ? parseInt(value) : '')}
-        renderInput={(params) => <TextField {...params} label="Min Experience" />}
-      />
+  disablePortal
+  id="combo-box-demo"
+  size="small"
+  options={minExpOptions}
+  sx={{ minWidth: "150px" }}
+  onChange={(event, value) => handleFilterValueChange('minExp', value ? parseInt(value) : null)}
+  renderInput={(params) => <TextField {...params} label="Min Experience" />}
+/>
     </div>
   );
 }

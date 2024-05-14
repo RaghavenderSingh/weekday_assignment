@@ -58,51 +58,49 @@ const JobListingPage = () => {
 
   const filterJobData = (jobData, filterParams) => {
     const { roles, remote, noOfEmployees, techStack, companySearchValue, minBasePay, minExp } = filterParams;
-  
+
     return jobData.filter(job => {
-      const { companyName, techStack: jobTechStack = [] } = job;
-  
+      const { companyName, techStack: jobTechStack = [], minExp: jobMinExp } = job;
+
       // Filter by company name
       if (companySearchValue && !companyName.toLowerCase().includes(companySearchValue.toLowerCase())) {
         return false;
       }
-  
+
       // Filter by min base pay
       if (minBasePay && job.minJdSalary !== null && parseInt(minBasePay) > job.minJdSalary) {
         return false;
       }
-  
+
       // Filter by roles
       if (roles.length > 0 && !roles.some(role => role.toLowerCase() === job.jobRole.toLowerCase())) {
         return false;
       }
-  
+
       // Filter by remote
       if (remote.length > 0 && !remote.includes(job.isRemote ? 'Remote' : 'On-site')) {
         return false;
       }
-  
+
       // Filter by number of employees
       const employeeRange = getEmployeeRange(job.noOfEmployees);
       if (noOfEmployees.length > 0 && !noOfEmployees.includes(employeeRange)) {
         return false;
       }
-  
+
       // Filter by tech stack
       if (techStack.length > 0 && !jobTechStack.some(tech => techStack.includes(tech))) {
         return false;
       }
-  
+
       // Filter by minimum experience
-      if (minExp && job.minExp < minExp) {
+      if (minExp !== null && jobMinExp !== null && jobMinExp > minExp) {
         return false;
       }
-  
+
       return true;
     });
   };
-
-
 
   const getEmployeeRange = (noOfEmployees) => {
     if (noOfEmployees <= 10) {
@@ -120,34 +118,36 @@ const JobListingPage = () => {
     }
   };
 
-  
-  const container ={
+  const container = {
     padding: "40px",
-    margin: "16px 50px",
+    maxWidth: "1200px", // Set a maximum width for larger screens
+    margin: "16px auto", // Center the container horizontally
     display: "flex",
     flexDirection: "column",
     alignContent: "center",
     justifyContent: "center",
-  }
-  const  centerItem ={
-    display: "flex",
-    justifyContent: "center",
-  }
+  };
 
   return (
     <div style={container}>
-      <div style={centerItem}>
-        <FilterComponent onFilterChange={handleFilterChange} />
-      </div>
+      <Grid container justifyContent="center">
+        <Grid item xs={12} md={4} lg={12}>
+          <FilterComponent onFilterChange={handleFilterChange} />
+        </Grid>
+      </Grid>
       {isLoading ? (
         <div>Loading...</div>
       ) : combinedJobData.length === 0 ? (
-        <Box sx={centerItem}>
+        <Box display="flex" justifyContent="center">
           <Typography variant="h5">No jobs found</Typography>
         </Box>
       ) : (
-        <Grid sx={centerItem} container spacing={2}>
-          {combinedJobData.map((job) => <JobCard key={job.jdUid} jobData={job} />)}
+        <Grid container spacing={6} justifyContent="center">
+          {combinedJobData.map((job) => (
+            <Grid item xs={12} sm={6} md={4} lg={4} key={job.jdUid}>
+              <JobCard jobData={job} />
+            </Grid>
+          ))}
         </Grid>
       )}
       {isFetching && !isLoading && <div>Loading more jobs...</div>}
