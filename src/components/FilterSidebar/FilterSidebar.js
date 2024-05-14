@@ -1,4 +1,3 @@
-// FilterSidebar.js
 import React, { useState, useEffect } from "react";
 import CustomizedTextField from "../../package/Textfield";
 import "./FilterSidebar.css";
@@ -12,7 +11,7 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
   const [noOfEmployees, setNoOfEmployees] = useState([]);
   const [techStack, setTechStack] = useState([]);
   const [minBasePay, setMinBasePay] = useState('');
-  const [experience,setExperience] = useState('')
+  const [minExp, setMinExp] = useState('');
 
   const handleFilterValueChange = (filterType, filterValue) => {
     switch (filterType) {
@@ -37,8 +36,8 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
       case 'minBasePay':
         setMinBasePay(filterValue);
         break;
-        case 'experience':
-          setExperience(filterValue);
+      case 'minExp':
+        setMinExp(filterValue);
         break;
       default:
         break;
@@ -49,13 +48,11 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
   const remoteOptions = ['Remote', 'On-site'];
   const techStackOptions = ['React', 'Angular', 'Vue', 'Node.js'];
   const minEmpl = ['0-10', '11-50', '51-100', '101-500'];
-  const minExp =['1','2','3','4','5']
-
+  const minExpOptions = ['1', '2', '3', '4', '5'];
 
   useEffect(() => {
-    handleFilterChange({ searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay,experience });
-  }, [searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay,experience , handleFilterChange]);
-
+    handleFilterChange({ searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay, minExp });
+  }, [searchValue, companySearchValue, roles, remote, noOfEmployees, techStack, minBasePay, minExp, handleFilterChange]);
 
   return (
     <div className="sideBar">
@@ -84,8 +81,9 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
 
       <CustomizedTextField
         label="Number of Employees"
-        data={minExp}
+        data={minEmpl}
         type="noOfEmployees"
+        //no params provided so it will not work
         onChange={(value) => handleFilterValueChange("noOfEmployees", value)}
       />
 
@@ -93,25 +91,28 @@ export default function FilterComponent({ onFilterChange: handleFilterChange }) 
         label="Tech Stack"
         data={techStackOptions}
         type="techStack"
-        onChange={(value) => handleFilterValueChange("techStack", value)}
+        //no params provided so it will not work
+        onChange={(value) => console.log(value)}
       />
+
       <Autocomplete
         disablePortal
         id="combo-box-demo"
         size="small"
         options={minEmpl}
-        sx={{minWidth:"150px"}}
-        onChange={(value) => handleFilterValueChange('minBasePay', value.target.value)}
+        sx={{ minWidth: "150px" }}
+        onChange={(event, value) => handleFilterValueChange('minBasePay', value)}
         renderInput={(params) => <TextField {...params} label="Min Base Pay" />}
       />
+
       <Autocomplete
         disablePortal
         id="combo-box-demo"
         size="small"
-        options={minExp}
-        sx={{minWidth:"150px"}}
-        onChange={(value) => handleFilterValueChange('Experience', value.target.value)}
-        renderInput={(params) => <TextField {...params} label="Experience" />}
+        options={minExpOptions}
+        sx={{ minWidth: "150px" }}
+        onChange={(event, value) => handleFilterValueChange('minExp', value ? parseInt(value) : '')}
+        renderInput={(params) => <TextField {...params} label="Min Experience" />}
       />
     </div>
   );

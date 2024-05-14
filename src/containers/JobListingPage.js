@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useGetJobsQuery } from '../api/jobsApi';
 import JobCard from '../components/Jobcard/JobCard';
 import FilterComponent from '../components/FilterSidebar/FilterSidebar';
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 const JobListingPage = () => {
   const [page, setPage] = useState(1);
@@ -57,45 +57,52 @@ const JobListingPage = () => {
   }, []);
 
   const filterJobData = (jobData, filterParams) => {
-    const { roles, remote, noOfEmployees, techStack, companySearchValue, minBasePay } = filterParams;
-
+    const { roles, remote, noOfEmployees, techStack, companySearchValue, minBasePay, minExp } = filterParams;
+  
     return jobData.filter(job => {
-      const { companyName, basePay } = job;
-
+      const { companyName, techStack: jobTechStack = [] } = job;
+  
       // Filter by company name
       if (companySearchValue && !companyName.toLowerCase().includes(companySearchValue.toLowerCase())) {
         return false;
       }
-
+  
       // Filter by min base pay
-      if (minBasePay && basePay < minBasePay) {
+      if (minBasePay && job.minJdSalary !== null && parseInt(minBasePay) > job.minJdSalary) {
         return false;
       }
-
+  
       // Filter by roles
       if (roles.length > 0 && !roles.some(role => role.toLowerCase() === job.jobRole.toLowerCase())) {
         return false;
       }
-
+  
       // Filter by remote
       if (remote.length > 0 && !remote.includes(job.isRemote ? 'Remote' : 'On-site')) {
         return false;
       }
-
+  
       // Filter by number of employees
       const employeeRange = getEmployeeRange(job.noOfEmployees);
       if (noOfEmployees.length > 0 && !noOfEmployees.includes(employeeRange)) {
         return false;
       }
-
-      // Filter by tech stack (assuming job.techStack is an array)
-      if (techStack.length > 0 && !job.techStack.some(tech => techStack.includes(tech))) {
+  
+      // Filter by tech stack
+      if (techStack.length > 0 && !jobTechStack.some(tech => techStack.includes(tech))) {
         return false;
       }
-
+  
+      // Filter by minimum experience
+      if (minExp && job.minExp < minExp) {
+        return false;
+      }
+  
       return true;
     });
   };
+
+
 
   const getEmployeeRange = (noOfEmployees) => {
     if (noOfEmployees <= 10) {
@@ -113,12 +120,7 @@ const JobListingPage = () => {
     }
   };
 
-  const displayCardStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    alignContent: 'flex-start',
-    gap: "10"
-  };
+  
   const container ={
     padding: "40px",
     margin: "16px 50px",
@@ -134,17 +136,19 @@ const JobListingPage = () => {
 
   return (
     <div style={container}>
-    <div style={centerItem}>
-      <FilterComponent onFilterChange={handleFilterChange} />
+      <div style={centerItem}>
+        <FilterComponent onFilterChange={handleFilterChange} />
       </div>
       {isLoading ? (
         <div>Loading...</div>
+      ) : combinedJobData.length === 0 ? (
+        <Box sx={centerItem}>
+          <Typography variant="h5">No jobs found</Typography>
+        </Box>
       ) : (
-  
         <Grid sx={centerItem} container spacing={2}>
           {combinedJobData.map((job) => <JobCard key={job.jdUid} jobData={job} />)}
-        </Grid >
-       
+        </Grid>
       )}
       {isFetching && !isLoading && <div>Loading more jobs...</div>}
     </div>
